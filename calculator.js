@@ -3,24 +3,17 @@ let alsNummer = 0;
 let first = 0;
 let dieRechnung;
 
-function plus(numA, numB) {
-    console.log(numA + numB);
-};
-
-function minus(numA, numB) {
-    console.log(numA - numB);
-};
-
-function divide(numA, numB) {
-    console.log(numA / numB);
-};
-
-function multiply(numA, numB) {
-    console.log(numA * numB);
-};
-
-function operate(operator, numA, numB) {
-	operator(numA, numB);
+function operate(dieAktion, numA, numB) {
+    if(dieAktion == "plus") {
+        display(numA + numB);
+    } else if(dieAktion == "minus") {
+        display(numA - numB);
+    } else if(dieAktion == "multiply") {
+        display(numA * numB);
+    } else if(dieAktion == "divide") {
+        display(numA / numB);
+    }
+    werteLöschen();
 };
 
 function display(arg) {
@@ -32,6 +25,15 @@ function display(arg) {
 function addListenerNumbers() {
     let allNumbers = document.querySelectorAll(".number");
     allNumbers.forEach(element => element.addEventListener("click",() => addNumber(element.innerHTML)));
+};
+
+//add number to display
+function addNumber(arg) {
+    displayValue.push(arg);
+    let stringArray = displayValue.reduce((a,b) => 
+        a+b);
+    alsNummer = parseFloat(stringArray);
+    display(alsNummer);
 };
 
 //add event listener to AC
@@ -56,24 +58,8 @@ function waitForOperation(ersteZahl, rechnung) {
 //add event listener to equals
 function addEventListenerEquals() {
     let dieGleichheit = document.querySelector(".equal");
-    dieGleichheit.addEventListener("click", () => equals(alsNummer));
+    dieGleichheit.addEventListener("click", () => operate(dieRechnung, first, alsNummer));
 }
-
-
-function equals(dieZweite) {
-    console.log(dieRechnung + "(" + first + "," + dieZweite +")");
-    console.log(dieRechnung);
-    operate(dieRechnung,first,dieZweite);
-};
-
-//add number to display
-function addNumber(arg) {
-    displayValue.push(arg);
-    let stringArray = displayValue.reduce((a,b) => 
-        a+b);
-    alsNummer = parseFloat(stringArray);
-    display(alsNummer);
-};
 
 //löschen 
 function löschen() {
@@ -82,10 +68,14 @@ function löschen() {
     display(alsNummer);
 }
 
+function werteLöschen() {
+    displayValue = [];
+    alsNummer = 0;
+}
+
 
 //add event listeners
 addListenerNumbers();
 addListenerAC();
 addListenersOperations();
 addEventListenerEquals();
-operate(minus,66,6);
